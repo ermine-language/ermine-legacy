@@ -8,6 +8,7 @@ object ErmineBuild extends Build {
   val getLibraryPath      = TaskKey[Unit]("get-library-path", "Gets the java.library.path environment variable")
   val main                = InputKey[Unit]("main", "Run the test Main class")
   val editor              = InputKey[Unit]("editor", "Run the Ermine Editor")
+  val repl                = InputKey[Unit]("repl", "Run the Ermine read-eval-print loop")
 
   lazy val ermine = Project( id = "ermine" , base = file("."), settings = projectSettings :+
     fullRunInputTask(repl, Compile, "com.clarifi.reporting.ermine.session.Console")).dependsOn(machines)
