@@ -1,3 +1,9 @@
+name := "ermine"
+
+organization := "com.clarifi"
+
+version := "0.1"
+
 scalaVersion := "2.10.2"
 
 scalacOptions ++=
@@ -11,10 +17,6 @@ javacOptions ++=
       "-Xlint:finally", "-Xlint:fallthrough", "-Xlint:overrides")
 
 parallelExecution := true
-
-name := "ermine"
-
-organization := "com.clarifi"
 
 javacOptions += "-Xlint"
 
