@@ -51,10 +51,13 @@ libraryDependencies ++= Seq(
   "org.scalaz" %% "scalaz-concurrent" % "7.0.2",
   "org.scalaz" %% "scalaz-effect" % "7.0.2",
   "org.scalaz" %% "scalaz-iterv" % "7.0.2",
+  "org.scalaz" %% "scalaz-scalacheck-binding" % "7.0.2" % "test",
   //"org.scala-lang" % "jline" % "2.10.2",
   "jline" % "jline" % "0.9.91",
   "log4j" % "log4j" % "1.2.14",
-  "org.scalaz" %% "scalaz-scalacheck-binding" % "7.0.2" % "test",
+  "net.sourceforge.jtds" % "jtds" % "1.3.1",
+  "org.xerial" % "sqlite-jdbc" % "3.7.2",
+  "mysql" % "mysql-connector-java" % "5.1.6",
+  "postgresql" % "postgresql" % "9.1-901-1.jdbc4",
   "org.scalacheck" %% "scalacheck" % "1.10.0" % "test"
 )
-
