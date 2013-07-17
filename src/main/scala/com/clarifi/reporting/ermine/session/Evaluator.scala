@@ -34,7 +34,7 @@ trait ErmineEvaluator {
   val baseEnv: SessionEnv = {
     implicit val e : SessionEnv = new SessionEnv
     Lib.preamble
-    Session.loadModules(preloads ++ List("Prelude", "Layout"))(e, supply, printer)
+    Session.loadModules(preloads ++ List("Prelude"))(e, supply, printer)
     e.loadFile = SourceFile inOrder (e.loadFile :: (loadPaths map (dir => SourceFile.filesystem(dir)(_))):_*)
     e
   }
@@ -138,10 +138,10 @@ object FilesystemReportsCache {
       .map(fil => Filesystem(fil.getPath, exotic=true))
 }
 
-class ResourcesReportsCache(val classLoader: ClassLoader)
+class ResourcesReportsCache(val classLoader: ClassLoader, val loadPaths : List[String] = Nil
+                             )
     extends LoaderReportsCache[String](ResourcesReportsCache.findModule(classLoader)) {
   import ReportsCache.ModuleExpr
-  val loadPaths : List[String] = Nil
 
   type Report = ModuleExpr[String]
 
