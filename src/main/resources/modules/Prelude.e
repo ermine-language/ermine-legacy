@@ -85,6 +85,7 @@ formatPeriod = formatPeriod_DateRange
 formatPeriodOr = formatPeriodOr_DateRange
 
 infixl 5 **
+infixl 5 +++
 
 primOrd = primOrd_Primitive
 all = all_Predicate
@@ -92,6 +93,7 @@ filterAll = filter_Predicate . all
 selectNulls = selectNulls_Predicate
 selectNotNulls = selectNotNulls_Predicate
 (**) = (**_Relation)
+(+++) = (+++_Relation)
 spaced = spaced_String
 splitCamelCase = splitCamelCase_String
 appendR = appendR_Record

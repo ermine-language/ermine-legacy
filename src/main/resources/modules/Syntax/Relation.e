@@ -42,6 +42,8 @@ import Relation.Op using {}
 
 infixl 5 **
 infixl 5 &
+infixl 5 +++
 
 (**) = join
 (&) r t = join r (relation [t])
+(+++) = union

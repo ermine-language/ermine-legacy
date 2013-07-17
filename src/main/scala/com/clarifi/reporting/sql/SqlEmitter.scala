@@ -546,7 +546,7 @@ trait EmitCheckExists_AlwaysFails extends SqlEmitter {
 // SQL dialect implementations
 
 class SqliteEmitter extends SqlEmitter
-    with EmitUuid_Strings with EmitCheckExists_AlwaysFails {
+    with EmitUuid_Strings with EmitCheckExists_AlwaysFails with EmitLimit_AsLimit {
 
   def isTransactional: Boolean = true
   def setConstraints(enable: Boolean, t: Iterable[TableName]): List[RawSql] =
