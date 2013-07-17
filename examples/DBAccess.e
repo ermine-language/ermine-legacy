@@ -18,6 +18,8 @@ table person_company: [person_id, company_id]
 table foods: [food_id, food_name]
 table likes: [person_id, food_id]
 
+conn = sqlite "jdbc:sqlite:examples/test.db"
+run = getRecords conn
 
 scanOut' f r = ioMonad ` (_ -> run r) >>= v ->
                for_ (r _ -> printLn . toString $ f r) (toList v)
@@ -29,15 +31,16 @@ byAge order = (order {age} people) # {person_name, age}
 oldest = byAge firstBy
 youngest = byAge lastBy
 
-conn = sqlite "jdbc:sqlite:examples/test.db"
-run = getRecords conn
-
 scanPeople = scanOut people
-scanEdges = scanOut (oldest +++ youngest)
+scanEdges = scanOut $ oldest +++ youngest
 
 danFoods = person ** likes ** foods
-         & { person_name = "Dan Doel" }
+         & { person_name = "Dan Peebles" }
          # { food_name }
+
+weirdFoods = person ** likes ** foods
+           & { person_name = "Runar Bjarnason" }
+           # { food_name }
 
 mhfDinnerParty = person ** likes ** foods ** company ** person_company
                & { company_name = "McGraw Hill Financial" }
