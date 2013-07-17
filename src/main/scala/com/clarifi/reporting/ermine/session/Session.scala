@@ -183,7 +183,7 @@ object Session {
     private[SourceFile] def hierarchy(module: String): List[String] =
       module.split('.').toList
 
-    private[Session] def forModule(module: String)(implicit s: SessionEnv): SourceFile =
+    private[session] def forModule(module: String)(implicit s: SessionEnv): SourceFile =
       s.loadFile(module) | NotFound(module)
 
     // evil
