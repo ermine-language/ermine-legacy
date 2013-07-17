@@ -1,4 +1,4 @@
-name := "ermine"
+name := "ermine-legacy"
 
 organization := "com.clarifi"
 
