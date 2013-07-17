@@ -750,7 +750,7 @@ object Console {
 
   def version     = "v0.4α"
   def copyright   = "Copyright 2011-2013"
-  def allrights   = "S&P Capital IQ"
+  def allrights   = "McGraw Hill Financial"
 
   def logo(n: String, l: List[String])(implicit e: ConsoleEnv): Unit = l match {
     case l1 :: l2 :: l3 :: l4 :: rest =>
@@ -771,17 +771,17 @@ object Console {
 
   def fancyLogo(implicit e: ConsoleEnv) {
     writeLn("")
-    writeLn("                                    _,-/\"---,")
-    writeLn("             ;\"\"\"\"\"\"\"\"\"\";         _`;; \"\"  «@`---v")
-    writeLn("           ; :::::  ::  \"'      _` ;;  \"    _.../")
-    writeLn("          ;\"     ;;  ;;;  '\",-`::    ;;,'\"\"\"\"")
-    writeLn("         ;\"          ;;;;.  ;;  ;;;  ::`    ____")
-    writeLn("        ,/ / ;;  ;;;______;;;  ;;; ::,`    / __/_____ _  ( )__  __")
-    writeLn("        /;; _;;   ;;;       ;       ;     / _//`__/  ' \\/ /`_ \\/ -)")
-    writeLn("        | :/ / ,;'           ;_ \"\")/     /___/_/ /_/_/_/_/_//_/\\__/ " + version)
-    writeLn("        ; ; / /\"\"\"=            \\;;\\\"\"=  Copyright © 2011-12 S&P Capital IQ")
-    writeLn("     ;\"\"\"';{::\"\"\"\"\"\"=            \\\"\"\"=")
-    writeLn("     \\/\"\"\"")
+    writeLn("                                 _,-/\"---,")
+    writeLn("          ;\"\"\"\"\"\"\"\"\"\";         _`;; \"\"  «@`---v")
+    writeLn("        ; :::::  ::  \"'      _` ;;  \"    _.../")
+    writeLn("       ;\"     ;;  ;;;  '\",-`::    ;;,'\"\"\"\"")
+    writeLn("      ;\"          ;;;;.  ;;  ;;;  ::`    ____")
+    writeLn("     ,/ / ;;  ;;;______;;;  ;;; ::,`    / __/_____ _  ( )__  __")
+    writeLn("     /;; _;;   ;;;       ;       ;     / _//`__/  ' \\/ /`_ \\/ -)")
+    writeLn("     | :/ / ,;'           ;_ \"\")/     /___/_/ /_/_/_/_/_//_/\\__/ " + version)
+    writeLn("     ; ; / /\"\"\"=            \\;;\\\"\"=  Copyright © 2011-13 McGraw Hill Financial")
+    writeLn("  ;\"\"\"';{::\"\"\"\"\"\"=            \\\"\"\"=")
+    writeLn("  \\/\"\"\"")
   }
 
   def rock(implicit e: ConsoleEnv) {
