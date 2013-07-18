@@ -138,8 +138,7 @@ object FilesystemReportsCache {
       .map(fil => Filesystem(fil.getPath, exotic=true))
 }
 
-class ResourcesReportsCache(val classLoader: ClassLoader, val loadPaths : List[String] = Nil
-                             )
+class ResourcesReportsCache(val classLoader: ClassLoader, val loadPaths : List[String] = Nil)
     extends LoaderReportsCache[String](ResourcesReportsCache.findModule(classLoader)) {
   import ReportsCache.ModuleExpr
 
