@@ -389,6 +389,12 @@ object Lib {
                          (_ / _), (_ / _), (_ / _))(a, b))},
            FA(a => a ->: a ->: a))
 
+    primOp(Global("Builtin", "primMod#"),
+           primBinOp("Builtin.primMod#"){(a, b) =>
+             Prim(numBin((_ % _), (_ % _), (_ % _),
+                         (_ % _), (_ % _), (_ % _))(a, b))},
+           FA(a => a ->: a ->: a))
+
     primOp(Global("Builtin", "primToInt#"), Fun(a =>
       Prim(numUn{case (a, num) => num toInt a}(a.extract))), FA(a => a ->: int))
 

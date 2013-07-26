@@ -7,16 +7,17 @@ need it. -}
 
 import Ord using fromLess
 
-infix 4 < > <= >=
+infix 4 < > <= >= %
 infixl 5 + -
 infixl 6 * /
 
-(+), (-), (*), (/), pow : PrimitiveNum n => n -> n -> n
+(+), (-), (*), (/), pow, (%) : PrimitiveNum n => n -> n -> n
 (+) = primPlus#
 (-) = primMinus#
 (*) = primTimes#
 (/) = primDiv#
 pow = primPow#
+(%) = primMod#
 
 neg, abs : PrimitiveNum n => n -> n
 neg = primNeg#
