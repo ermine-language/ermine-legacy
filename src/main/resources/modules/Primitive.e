@@ -7,9 +7,9 @@ need it. -}
 
 import Ord using fromLess
 
-infix 4 < > <= >= %
+infix 4 < > <= >=
 infixl 5 + -
-infixl 6 * /
+infixl 6 * / %
 
 (+), (-), (*), (/), pow, (%) : PrimitiveNum n => n -> n -> n
 (+) = primPlus#
