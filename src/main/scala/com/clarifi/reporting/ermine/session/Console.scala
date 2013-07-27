@@ -266,7 +266,7 @@ object Console {
         other(str)
       }
     },
-    new Action(":quit", List("quit",":exit","exit"), None, "end this session") {
+    new Action(":quit", List("quit"), None, "end this session") {
       def apply(s: String)(implicit e: ConsoleEnv) { e.quit = true }
     },
     new Action(":stack", List(), None, "print the stack trace of the last error") {
