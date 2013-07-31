@@ -11,29 +11,12 @@ object ErmineBuild extends Build {
   val repl                = InputKey[Unit]("repl", "Run the Ermine read-eval-print loop")
 
   lazy val ermine = Project( id = "ermine" , base = file("."), settings = projectSettings :+
-    fullRunInputTask(repl, Compile, "com.clarifi.reporting.ermine.session.Console")).dependsOn(machines)
-
-  lazy val machines  = fromGithub("runarorama", "scala-machines", subProject = None, sha = Some("d2739d0752f37d4b85505c7c281cfdadba375b3d"))
-
-  def fromGithub(githubUser: String, project: String, subProject: Option[String] = None, sha: Option[String] = None) = {
-    // if a specific commit isnt supplied, just fetch the very latest commit.
-    // 'sbt update' doesn't seem to get the latest even though this says that it should
-    // http://stackoverflow.com/questions/8864317/how-do-i-refresh-updated-git-dependency-artifacts-in-sbt
-    // so instead we have to go to github and get the latest version.
-    val shaOrLatest = sha.getOrElse{
-      val commitsUrl = "https://api.github.com/repos/"+githubUser+"/"+project+"/commits?sha=master"
-      scala.io.Source.fromURL(commitsUrl).takeWhile(_ != ',').mkString.dropWhile(_!=':').drop(2).dropRight(1)
-    }
-    val projectUri = uri("https://github.com/"+githubUser+"/"+project+".git#" + shaOrLatest)
-    subProject match {
-      case None => RootProject(projectUri)
-      case Some(sub) => ProjectRef(projectUri, sub)
-    }
-  }
+    fullRunInputTask(repl, Compile, "com.clarifi.reporting.ermine.session.Console"))
 
   private lazy val projectSettings =
     Defaults.defaultSettings ++ Seq[SettingsDefinition](
         scalaVersion := "2.10.2",
+        resolvers += "runarorama bintray maven" at "http://dl.bintray.com/runarorama/maven/",
         compileTestRuntime(sc => classpathConfiguration in sc := sc)
        ,mainClass in (Compile, run) := Some("com.clarifi.reporting.ermine.session.Console")
        ,compileTestRuntime(sco => allUnmanagedResourceDirectories in sco <<=

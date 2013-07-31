@@ -6,6 +6,8 @@ version := "0.1"
 
 scalaVersion := "2.10.2"
 
+licenses += ("BSD 2-Clause License", url("https://github.com/ermine-language/ermine-legacy/blob/master/LICENSE"))
+
 scalacOptions ++=
   Seq("-encoding", "UTF-8", "-Yrecursion", "50", "-deprecation",
       "-unchecked", "-Xlint", "-feature",
@@ -52,6 +54,7 @@ libraryDependencies ++= Seq(
   "org.scalaz" %% "scalaz-effect" % "7.0.2",
   "org.scalaz" %% "scalaz-iterv" % "7.0.2",
   "org.scalaz" %% "scalaz-scalacheck-binding" % "7.0.2" % "test",
+  "machines"   %% "machines" % "1.0",
   //"org.scala-lang" % "jline" % "2.10.2",
   "jline" % "jline" % "0.9.91",
   "log4j" % "log4j" % "1.2.14",
@@ -61,3 +64,7 @@ libraryDependencies ++= Seq(
   "postgresql" % "postgresql" % "9.1-901-1.jdbc4",
   "org.scalacheck" %% "scalacheck" % "1.10.0" % "test"
 )
+
+seq(bintraySettings:_*)
+
+publishMavenStyle := true
