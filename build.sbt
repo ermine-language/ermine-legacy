@@ -6,7 +6,15 @@ version := "0.1"
 
 scalaVersion := "2.10.2"
 
+crossScalaVersions := Seq("2.10.2")
+
+description := "Legacy Ermine Type Checker and Interpreter in Scala."
+
 licenses += ("BSD 2-Clause License", url("https://github.com/ermine-language/ermine-legacy/blob/master/LICENSE"))
+
+seq(bintraySettings:_*)
+
+publishMavenStyle := true
 
 scalacOptions ++=
   Seq("-encoding", "UTF-8", "-Yrecursion", "50", "-deprecation",
@@ -64,7 +72,3 @@ libraryDependencies ++= Seq(
   "postgresql" % "postgresql" % "9.1-901-1.jdbc4",
   "org.scalacheck" %% "scalacheck" % "1.10.0" % "test"
 )
-
-seq(bintraySettings:_*)
-
-publishMavenStyle := true
