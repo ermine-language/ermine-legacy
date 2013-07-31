@@ -10,7 +10,7 @@ crossScalaVersions := Seq("2.10.2")
 
 description := "Legacy Ermine Type Checker and Interpreter in Scala."
 
-licenses += ("BSD 2-Clause License", url("https://github.com/ermine-language/ermine-legacy/blob/master/LICENSE"))
+licenses += ("BSD Simplified", url("https://github.com/ermine-language/ermine-legacy/blob/master/LICENSE"))
 
 seq(bintraySettings:_*)
 
