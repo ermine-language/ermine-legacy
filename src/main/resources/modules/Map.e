@@ -100,7 +100,7 @@ groupBy o kf xs = groupBy# xs (function1 kf) (toOrdering# o)
 
 -- | Left-biased union.
 union : Map k v -> Map k v -> Map k v
-union l r = foldl' (flip . uncurry $ insert) r (toAssocList l)
+union l r = foldl (flip . uncurry $ insert) r (toAssocList l)
 
 -- | Lifted value semigroup.
 unionWith : (v -> v -> v) -> Map k v -> Map k v -> Map k v

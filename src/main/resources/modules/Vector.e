@@ -93,8 +93,8 @@ find f vs = fromMaybe# ' find# (function1 (x -> toBool# (f x))) vs
 map : (a -> b) -> Vector a -> Vector b
 map f = map# (function1 f)
 
-foldl' : (b -> a -> b) -> b -> Vector a -> b
-foldl' f z v = rec z 0
+foldl : (b -> a -> b) -> b -> Vector a -> b
+foldl f z v = rec z 0
   where l = length v
         rec !z n = if (n >= l) z (rec (f z $ at n v) (n + 1))
 

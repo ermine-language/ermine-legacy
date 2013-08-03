@@ -44,7 +44,7 @@ weightedMean : List (Double, Double) -> Maybe Double
 weightedMean ts = let
     ts' = ensureNonnegativeWeights ts
     sumValues  = ts' |> foldl weightedSum 0.0
-    sumWeights = ts' |> map snd |> foldl' (+) 0.0
+    sumWeights = ts' |> map snd |> foldl (+) 0.0
   in if (sumWeights == 0.0)
         Nothing
         (Just (sumValues / sumWeights))
@@ -52,8 +52,8 @@ weightedMean ts = let
 weightedHarmonicMean : List (Double, Double) -> Maybe Double
 weightedHarmonicMean ts = let
     ts' = ensureNonnegativeWeights ts
-    sumWeights = ts' |> map snd |> foldl' (+) 0.0
-    sumQuotient = ts' |> foldl' harmonicQuotientSum 0.0
+    sumWeights = ts' |> map snd |> foldl (+) 0.0
+    sumQuotient = ts' |> foldl harmonicQuotientSum 0.0
   in if (sumQuotient == 0.0)
         Nothing
         (Just (sumWeights / sumQuotient))

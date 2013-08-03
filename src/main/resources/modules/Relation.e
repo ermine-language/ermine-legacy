@@ -105,7 +105,7 @@ maxRowBy f r = join (maxBy f r) r
 minRowBy f r = join (minBy_A f r) r
 
 unionAll : List (Relation r) -> Relation r
-unionAll (h::t) = foldl' union h t
+unionAll (h::t) = foldl union h t
 unionAll [] = relation []
 
 -- | Removes `f2`, then renames `f1` to `f2`

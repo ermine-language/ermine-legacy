@@ -151,7 +151,7 @@ private
     let a = root t
         cs = children cs
         cs2 = map_SL ' acc f m ' toList_V cs
-        r2 = foldl'_L op z ' map_SL fst cs2
+        r2 = foldl_L op z ' map_SL fst cs2
     in (r2, node r2 (vector_V . map_SL snd ' cs2))
 -}
 

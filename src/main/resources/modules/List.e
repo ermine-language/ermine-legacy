@@ -46,12 +46,9 @@ foldr : (a -> b -> b) -> b -> List a -> b
 foldr f z (x :: xs) = f x (foldr f z xs)
 foldr f z [] = z
 
-foldl, foldl' : (b -> a -> b) -> b -> List a -> b
-foldl f z [] = z
-foldl f z (x :: xs) = foldl f (f z x) xs
-
-foldl' f !z [] = z
-foldl' f !z (x :: xs) = foldl' f (f z x) xs
+foldl : (b -> a -> b) -> b -> List a -> b
+foldl f !z [] = z
+foldl f !z (x :: xs) = foldl f (f z x) xs
 
 -- | Reduction from the right.
 foldr1 : (a -> a -> a) -> List a -> Maybe a
@@ -80,7 +77,7 @@ scanl' f !b (x :: xs) = b :: scanl f (f b x) xs
 (++) xs ys = foldr (::) ys xs
 
 reverse : List a -> List a
-reverse = foldl' (flip (::)) Nil
+reverse = foldl (flip (::)) Nil
 
 head : List a -> a
 head (x :: _) = x
@@ -116,17 +113,17 @@ null [] = True
 null _  = False
 
 length : List a -> Int
-length  = foldl' (x _ -> x + 1) 0
+length  = foldl (x _ -> x + 1) 0
 
 isEmpty l = 0 == length l
 
 sum, product : List Int -> Int
-sum     = foldl' (+) 0
-product = foldl' (*) 1
+sum     = foldl (+) 0
+product = foldl (*) 1
 
 minBy : Primitive b => (a -> b) -> List a -> Maybe a
 minBy f [] = Nothing
-minBy f (h :: t) = Just . snd ' foldl' (p@(mb, a) a2 ->
+minBy f (h :: t) = Just . snd ' foldl (p@(mb, a) a2 ->
   let b2 = f a2
   in if (b2 < mb) (b2, a2) p) (f h, h) t
 
