@@ -20,8 +20,8 @@ object ErmineBuild extends Build {
         compileTestRuntime(sc => classpathConfiguration in sc := sc)
        ,mainClass in (Compile, run) := Some("com.clarifi.reporting.ermine.session.Console")
        ,compileTestRuntime(sco => allUnmanagedResourceDirectories in sco <<=
-          (Defaults.inDependencies(unmanagedResourceDirectories in sco, _ => Seq.empty)
-           (_.reverse.flatten)))
+          Defaults.inDependencies(unmanagedResourceDirectories in sco, _ => Seq.empty)
+           (_.reverse.flatten))
         // Usually, resources end up in the classpath by virtue of `compile'
         // copying them into target/scala-*/classes, and from there into jar.  But
         // we want in development (1) I can edit an Ermine module in src
