@@ -12,6 +12,8 @@ description := "Legacy Ermine Type Checker and Interpreter in Scala."
 
 licenses += ("BSD Simplified", url("https://github.com/ermine-language/ermine-legacy/blob/master/LICENSE"))
 
+bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("ermine")
+
 seq(bintraySettings:_*)
 
 publishMavenStyle := true
