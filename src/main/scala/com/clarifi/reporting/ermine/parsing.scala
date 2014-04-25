@@ -267,9 +267,9 @@ package object parsing {
   private def charEsc      = choice(charEscMagic.toSeq.map { case (c,d) => ch(c) as d } :_*)
   private def escapeCode   = (charControl | charEsc) scope "escape code" // TODO: charNum, charAscii
   private def charEscape   = ch('\\') >> escapeCode
-  private def charLetter   = satisfy(c => (c != '\'') && (c != '\\') && (c > '\026'))
+  private def charLetter   = satisfy(c => (c != '\'') && (c != '\\') && (c > '\u0016'))
   private def charChar     = (charLetter | charEscape) scope "character literal character"
-  private def stringLetter = satisfy(c => (c != '"') && (c != '\\') && (c > '\026'))
+  private def stringLetter = satisfy(c => (c != '"') && (c != '\\') && (c > '\u0016'))
   private def stringEscape = ch('\\') >> (
     (simpleSpace.skipSome >> (ch('\\') scope "end of string gap")).as(None) | // escape gap
     ch('&').as(None) |                                                  // empty escape
@@ -300,8 +300,8 @@ package object parsing {
     val oneToNine = satisfy("123456789" contains (_:Char))
     for {
       y <- ch('@') >> nat_ << ch('/')
-      m <- nat_.filter(1 to 12 contains) << ch('/')
-      d <- nat_.filter(1 to 31 contains)
+      m <- nat_.filter(1L to 12L contains) << ch('/')
+      d <- nat_.filter(1L to 31L contains)
     } yield {
       import java.util.Calendar
       val c = Calendar getInstance ymdPivotTimeZone

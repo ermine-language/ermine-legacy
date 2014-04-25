@@ -10,7 +10,7 @@ import scalaz.syntax.semigroup._
 
 trait TraversableColumns[E <: TraversableColumns[E]] {self: E =>
   /** Traversal over columns in `E` (myself). */
-  def traverseColumns[F[_]: Applicative](f: ColumnName => F[ColumnName]): F[E]
+  def traverseColumns[F[+_]: Applicative](f: ColumnName => F[ColumnName]): F[E]
 
   /** @note May not contain all of `foldMap`. */
   def typedColumnFoldMap[Z: Monoid](f: (ColumnName, PrimT) => Z): Z
@@ -35,7 +35,7 @@ trait TraversableColumns[E <: TraversableColumns[E]] {self: E =>
     traverseColumns[Id](f)
 
   def foldMap[M: Monoid](f: ColumnName => M): M =
-    traverseColumns[({type λ[α] = M})#λ](f)
+    traverseColumns[({type λ[+α] = M})#λ](f)
 
   /** Column traversals can be sequenced. */
   def columnsProduct[OE <: TraversableColumns[OE]](other: OE):
@@ -46,7 +46,7 @@ object TraversableColumns {
   case class Product[A <: TraversableColumns[A], B <: TraversableColumns[B]
                    ](_1: A, _2: B)
        extends Product2[A, B] with TraversableColumns[Product[A, B]] {
-    def traverseColumns[F[_]: Applicative](f: ColumnName => F[ColumnName]):
+    def traverseColumns[F[+_]: Applicative](f: ColumnName => F[ColumnName]):
         F[Product[A, B]] =
       ^(_1 traverseColumns f, _2 traverseColumns f)(Product.apply)
 

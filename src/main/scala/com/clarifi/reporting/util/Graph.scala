@@ -244,7 +244,7 @@ object PartitionedSet {
   implicit def PartitionedSetEqual[A: Order]: Equal[PartitionedSet[A]] =
     if (Order[A].equalIsNatural) Equal.equalA
     else Equal equal ((l, r) =>
-      l.elements === r.elements && l.cliques.toSet === r.cliques.toSet)
+      l.elements === r.elements && l.cliques.toSet[Clique[A]] === r.cliques.toSet[Clique[A]])
 
   implicit def PartitionedSetShow[A: Show]: Show[PartitionedSet[A]] =
     Show.shows(ps => "PartitionedSet(" + ps.cliques.map(_.shows).mkString(",") + ")")

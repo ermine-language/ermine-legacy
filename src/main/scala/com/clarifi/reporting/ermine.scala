@@ -21,7 +21,7 @@ package object ermine {
   type PatternVar = V[Annot]
   type PatternVars = Vars[Annot]
 
-  def skip[T[+_]](p:Functorial[T,Any]): T[Unit] = p as ()
+  def skip[T[+_]](p:Functorial[T,Any]): T[Unit] = p.as(())
   def as[T[+_],A](p:Functorial[T,Any], a: A): T[A] = p as a
   def filterMap[T[+_],A,B](p: Filtered[T,A])(f: A => Option[B]): T[B] = p filterMap f
   def many1[T[+_],A](p: Alternating[T,A]): T[List[A]] = p some // can't use some!

@@ -42,14 +42,14 @@ trait Alternating[T[+_],+A] extends Applied[T,A] with Filtered[T,A] {
   def |[B>:A](m: => T[B]): T[B]
   def orElse[B>:A](m: => B): T[B]
   def optional: T[Option[A]] = map(Some(_)).orElse(None)
-  def skipOptional: T[Unit] = skip orElse ()
+  def skipOptional: T[Unit] = skip.orElse(())
   def many: T[List[A]] = some orElse List()
   def some: T[List[A]] = map2(many)(_::_)
-  def skipMany: T[Unit] = skipSome orElse ()
+  def skipMany: T[Unit] = skipSome.orElse(())
   def skipSome: T[Unit] = >>(skipMany)
   def sepBy(sep: T[Any]): T[List[A]] = sepBy1(sep) orElse List()
   def sepBy1(sep: T[Any]): T[List[A]] = map2((sep >> self).many)(_::_)
-  def skipSepBy(sep: T[Any]): T[Unit] = skipSepBy1(sep) orElse ()
+  def skipSepBy(sep: T[Any]): T[Unit] = skipSepBy1(sep).orElse(())
   def skipSepBy1(sep: T[Any]): T[Unit] = (sep >> self).skipMany
   def chainr[B>:A](op: T[(B,B) => B]): T[B] =
     map2(op.map2[B, B => B](chainr(op))((f,x) => y => f(y,x)) orElse ((x: B) => x))((b,f) => f(b))
@@ -66,8 +66,8 @@ trait Alternating[T[+_],+A] extends Applied[T,A] with Filtered[T,A] {
   def sepEndBy1(sep: T[Any]): T[List[A]] =
     map2((sep >> sepEndBy(sep)).map(as => (a: A) => a :: as) orElse ((a: A) => List(a)))((b,f) => f(b))
   def sepEndBy(sep: T[Any]): T[List[A]] = sepEndBy1(sep) orElse List()
-  def skipSepEndBy1(sep: T[Any]): T[Unit] = >>((sep >> skipSepEndBy(sep)) orElse ())
-  def skipSepEndBy(sep: T[Any]): T[Unit] = skipSepEndBy1(sep) orElse ()
+  def skipSepEndBy1(sep: T[Any]): T[Unit] = >>((sep >> skipSepEndBy(sep)).orElse(()))
+  def skipSepEndBy(sep: T[Any]): T[Unit] = skipSepEndBy1(sep).orElse(())
 }
 
 // technically these are mostly semigroupoid-like structures, because we don't offer unit directly

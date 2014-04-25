@@ -32,9 +32,9 @@ class SqlExecution(implicit emitter: SqlEmitter) {
         val query = sql.emitSql
         logger ltrace ("Executing query " |+| query.run)
 
-        try DB.withResultSet(query, rs => DB.getMetaData(rs) map { md =>
+        DB.withResultSet(query, rs => DB.getMetaData(rs) map { md =>
           val cc = md.getColumnCount
-          logger trace ("Finished executing query")
+          logger trace "Finished executing query"
           def nextRecord: Record = {
             Range(1, cc + 1).map { x =>
               import java.sql.Types._
