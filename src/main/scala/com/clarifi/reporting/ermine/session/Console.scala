@@ -2,14 +2,17 @@ package com.clarifi.reporting
 package ermine
 package session
 
-import scala.io.{ Source }
+import scala.io.Source
 
-import jline.{ ConsoleReader, Terminal, SimpleCompletor, ArgumentCompletor, MultiCompletor, FileNameCompletor }
+import jline.{TerminalFactory, Terminal}
+import jline.console.ConsoleReader
+import jline.console.completer.{StringsCompleter, AggregateCompleter, ArgumentCompleter, FileNameCompleter}
+import jline.console.history.FileHistory
 import java.awt.Toolkit
-import java.awt.datatransfer.{Clipboard, DataFlavor}
+import java.awt.datatransfer.DataFlavor
 
 import java.util.Date
-import java.io.{ PrintWriter, InputStream, FileInputStream, FileDescriptor, OutputStreamWriter }
+import java.io.{ PrintWriter, InputStream, FileInputStream, FileDescriptor, OutputStream, OutputStreamWriter }
 import java.io.File.separator
 import java.lang.Exception
 import scala.collection.immutable.List
@@ -57,16 +60,17 @@ abstract class Action(val name: String, val alts: List[String], arg: Option[Docu
 class ConsoleEnv(
   _sessionEnv: SessionEnv,
   val in: InputStream = new FileInputStream(FileDescriptor.in),
-  val out: PrintWriter = new PrintWriter(new OutputStreamWriter(System.out)),
-  val terminal: Terminal = Terminal.getTerminal
+  val out: OutputStream = System.out,
+  val terminal: Terminal = TerminalFactory.create
 ) {
   implicit val supply: Supply = Supply.create
-  implicit val con = new Printer {
+  implicit val con: Printer = new Printer {
     def apply(s: String) {
-      reader.printString(s)
+      reader.print(s)
       out.flush
     }
   }
+  private val out_ : PrintWriter = new PrintWriter(new OutputStreamWriter(out))
 
   // can't make this a val without losing sessionEnv = syntax. also, functions that take this often throw exceptions
   // so use the session(implicit s => ...) combinator instead
@@ -99,37 +103,31 @@ class ConsoleEnv(
   }
 
   // repl and autocomplete
-  val reader = new ConsoleReader(in, out, null, terminal)
+  val reader = new ConsoleReader(in, out, terminal)
 
   // auto-completor (sic)
-  val completor = new SimpleCompletor("")
-  completor.setDelimiter(" ")
+  val completor = new StringsCompleter("")
+  //completor.setDelimiter(" ")
 
-  val loadCompletor = new ArgumentCompletor(List(
-    new SimpleCompletor(":load"),
-    new FileNameCompletor
-  ).toArray)
-  loadCompletor.setStrict(true)
-
-  val argCompletor = new ArgumentCompletor(
-    List(
-      new MultiCompletor(
-        List(
-          new SimpleCompletor((Console.actions.flatMap(a => a.name :: a.alts) ++ startingKeywords).toArray),
-          completor
-        ).toArray : Array[jline.Completor]
-      ),
-      completor
-    ).toArray
+  val loadCompleter = new ArgumentCompleter(
+    new StringsCompleter(":load"),
+    new FileNameCompleter
   )
-  argCompletor.setStrict(false)
+  loadCompleter.setStrict(true)
 
-  reader.addCompletor(
-    new MultiCompletor(
-      List(
-        loadCompletor,
-        argCompletor
-      ).toArray : Array[jline.Completor]
+  val argCompleter = new ArgumentCompleter(
+    new AggregateCompleter(
+      new StringsCompleter((Console.actions.flatMap(a => a.name :: a.alts) ++ startingKeywords):_*),
+      completor
+    ),
+    completor
+  )
+  argCompleter.setStrict(false)
+
+  reader.addCompleter(
+    new AggregateCompleter(
+      loadCompleter,
+      argCompleter
     )
   )
 
@@ -143,10 +141,10 @@ class ConsoleEnv(
     case _ => g
   }
 
-  def updateCompletor {
+  def updateCompleter {
     val ps = parseState("")
     val names = otherKeywords ++ (ps.termNames.keySet ++ ps.typeNames.keySet ++ ps.kindNames.keySet).map(_.string)
-    completor.setCandidateStrings(names.toArray)
+    //completor.setCandidateStrings(names.toArray)
   }
 
   def assumeClosed(t: Term)(doIt: => Unit) {
@@ -172,11 +170,11 @@ class ConsoleEnv(
 
   def importing(m: String, affix: Option[String], exp: List[Explicit], using: Boolean) { imports = imports + (m -> (affix, exp, using)) }
 
-  updateCompletor
+  updateCompleter
 
   def sessionEnv_=(s: SessionEnv) {
     sessionEnv := s
-    updateCompletor
+    updateCompleter
   }
 
   def parseState(s: String) = ParseState.mk("<interactive>", s, "REPL").importing(sessionEnv.termNames, sessionEnv.cons.keySet, imports)
@@ -186,7 +184,7 @@ class ConsoleEnv(
     val envp = sessionEnv.copy
     try {
       val r = s(sessionEnv)
-      updateCompletor
+      updateCompleter
       Some(r)
     } catch { case e@Death(err, _) =>
       sessionEnv = envp
@@ -215,17 +213,17 @@ class ConsoleEnv(
       sayLn("runtime error:")
       sayLn(e.doc)
       stackHint
-      stackHandler = () => e.printStackTrace(out)
+      stackHandler = () => e.printStackTrace(out_)
     case e : Throwable =>
       sayLn("runtime error: " + e.getMessage)
       stackHint
-      stackHandler = () => e.printStackTrace(out)
+      stackHandler = () => e.printStackTrace(out_)
   }
 
   // if we have a bottom, we want to set the stackHandler
   def handlingBot(a: Throwable) = {
     stackHint
-    stackHandler = () => a.printStackTrace(out)
+    stackHandler = () => a.printStackTrace(out_)
   }
 
   def conMap(ps: ParseState) = Type.conMap("REPL", ps.typeNames, sessionEnv.cons)
@@ -494,7 +492,7 @@ object Console {
     new Action(":clear", List(), None, "Clear the screen") {
       def apply(s: String)(implicit e: ConsoleEnv) =
         if (!e.reader.clearScreen())
-          writeLn("\n"*e.terminal.getTerminalHeight) // can't clear the screen? come on
+          writeLn("\n"*e.terminal.getHeight) // can't clear the screen? come on
     },
     new Action(":type", List(), Some("<expr>"), "Infer the type of an expression") {
       def apply(s: String)(implicit e: ConsoleEnv) {
@@ -718,7 +716,7 @@ object Console {
   // of course with all this we don't really need the trampoline
   def repl(implicit e: ConsoleEnv) {
     e.reader.setBellEnabled(false)
-    e.reader.setDefaultPrompt(">> ")
+    e.reader.setPrompt(">> ")
     var line: String = null
     while (!e.quit && { line = e.reader.readLine(">> ", e.reader.getEchoCharacter); line != null }) {
       e.handling(
@@ -805,7 +803,7 @@ object Console {
     com.clarifi.reporting.util.Logging.initializeLogging
     try {
       implicit val env = new ConsoleEnv(new SessionEnv)
-      env.reader.getHistory.setHistoryFile(new java.io.File(".ermine_history"))
+      env.reader.setHistory(new FileHistory(new java.io.File(".ermine_history")))
       rock
     } catch {
       case e : Throwable =>
