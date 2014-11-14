@@ -2,11 +2,11 @@ package com.clarifi.reporting.util
 
 import org.apache.log4j.Logger
 
-object PimpedLogger{
-  implicit def pimpMyLogger(log:Logger) = new PimpedLogger(log)
+object EnrichedLogger{
+  implicit def enrichMyLogger(log:Logger) = new EnrichedLogger(log)
 }
 
-class PimpedLogger(log:Logger) {
+class EnrichedLogger(log:Logger) {
   def timed[T](message:String)(f: => T) = {
     val t1 = System.currentTimeMillis
     try f

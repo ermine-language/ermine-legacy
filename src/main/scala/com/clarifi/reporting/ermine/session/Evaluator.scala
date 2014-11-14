@@ -3,7 +3,7 @@ package ermine.session
 
 import com.clarifi.reporting.ermine.{Bottom, Prim, Runtime}
 import com.clarifi.reporting.ermine.session.foreign.SortedMap.{FD => ErMap}
-import com.clarifi.reporting.util.PimpedLogger._
+import com.clarifi.reporting.util.EnrichedLogger._
 import Session.{Filesystem, Resource, SourceFile}
 import com.clarifi.reporting.util.IOUtils._
 

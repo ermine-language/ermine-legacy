@@ -2,7 +2,7 @@ package com.clarifi.reporting
 package sql
 
 import com.clarifi.reporting.backends._
-import com.clarifi.reporting.util.PimpedLogger._
+import com.clarifi.reporting.util.EnrichedLogger._
 import com.clarifi.reporting.Reporting._
 import PrimT._
 import DB._

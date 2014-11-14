@@ -33,7 +33,7 @@ import Plan.awaits
 import Tee.{ right, left }
 
 import org.apache.log4j.Logger
-import com.clarifi.reporting.util.PimpedLogger._
+import com.clarifi.reporting.util.EnrichedLogger._
 
 case class SqlPrg(h: Header,
                   prg: List[SqlStatement],
